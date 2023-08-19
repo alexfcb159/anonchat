@@ -1,0 +1,22 @@
+.message {
+    border: 5px solid red;
+    width: max-content;
+}
+
+#you {
+    border: 5px solid green;
+    background-color: green;
+    align-self: end;
+}
+
+#other {
+    border: 5px solid purple;
+    background-color: purple;
+    align-self: start;
+}
+
+.message-meta {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}

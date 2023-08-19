@@ -1,0 +1,15 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    background-color: #202a2c;
+    color: #fff;
+    font-family: 'Roboto Light', serif;
+    font-size: 12px;
+}
+
+@media (max-width: 768px) {
+    * {
+        font-size: 8px;
+    }
+}
