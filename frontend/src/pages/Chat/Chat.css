@@ -35,8 +35,12 @@
     margin-bottom: 20px;
     overflow: auto;
     display: flex;
-    border: 5px solid blue;
     flex-direction: column;
+}
+
+.message-container {
+    overflow-y: scroll;
+    overflow-x: hidden;
 }
 
 .input-area {

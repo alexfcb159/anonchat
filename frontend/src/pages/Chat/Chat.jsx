@@ -4,6 +4,7 @@ import './Chat.css';
 import Button from "../../components/Button/Button.jsx";
 import User from "../../components/User/User";
 import Message from "../../components/Message/Message";
+import ScrollToBottom from 'react-scroll-to-bottom';
 
 export default function Chat ({ socket, username }) {
     const [currentMessage, setCurrentMessage] = useState('');
@@ -40,17 +41,19 @@ export default function Chat ({ socket, username }) {
 
             <div className='middle'>
                 <div className='messages'>
-                    {messageList.map((messageContent) => {
-                        return (
-                            <Message
-                                message={messageContent.message}
-                                time={messageContent.time}
-                                author={messageContent.author}
-                                username={username}
-                                messageData={messageContent}
-                            />
-                        )
-                    })}
+                    <ScrollToBottom className='message-container'>
+                        {messageList.map((messageContent) => {
+                            return (
+                                <Message
+                                    message={messageContent.message}
+                                    time={messageContent.time}
+                                    author={messageContent.author}
+                                    username={username}
+                                    messageData={messageContent}
+                                />
+                            )
+                        })}
+                    </ScrollToBottom>
                 </div>
                 <form className='input-area'>
                     <input type='text' className='input' placeholder='Enter your message' value={currentMessage} onChange={(event) => setCurrentMessage(event.target.value)} />
