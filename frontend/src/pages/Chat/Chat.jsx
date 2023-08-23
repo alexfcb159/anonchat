@@ -25,9 +25,8 @@ export default function Chat ({ socket, username }) {
 
     useEffect(() => {
         socket.on('Receive_message', (data) => {
-            // console.log(data);
             setMessageList((list) => [...list, data]);
-        })
+        });
     }, [socket]);
 
     return (
