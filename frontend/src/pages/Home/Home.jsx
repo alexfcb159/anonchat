@@ -9,7 +9,7 @@ export default function Home ({ socket, onUser }) {
     const joinLobby = () => {
         if (username !== '') {
             onUser(username);
-            socket.emit('Join_lobby', 'Lobby');
+            socket.emit('Join_lobby', {username: username, lobby: 'Lobby'});
         }
     }
 

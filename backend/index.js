@@ -5,6 +5,8 @@ const cors = require('cors');
 app.use(cors());
 const server = http.createServer(app);
 const { Server } = require('socket.io');
+const { PrismaClient } = require('@prisma/client');
+const prisma = new PrismaClient();
 
 const io = new Server(server, {
     cors: {
@@ -15,10 +17,22 @@ const io = new Server(server, {
 
 io.on('connection', (socket) => {
     console.log(`User connected: ${socket.id}`);
+    let userDatabaseId;
 
-    socket.on('Join_lobby', (data) => {
-        socket.join(data);
-        console.log(`User with ID: ${socket.id} joined room: ${data}`);
+    socket.on('Join_lobby', async (data) => {
+        socket.join(data.lobby);
+
+        const user = await prisma.user.create({
+            data: {
+                name: data.username,
+                room: data.lobby
+            },
+        });
+
+        userDatabaseId = user.id;
+
+        console.log(user);
+        console.log(`User with ID: ${socket.id} joined room: ${data.lobby}`);
     });
 
     socket.on('Join_room', (data) => {
@@ -30,8 +44,14 @@ io.on('connection', (socket) => {
         socket.to('Lobby').emit('Receive_message', data);
     });
 
-    socket.on('disconnect', () => {
+    socket.on('disconnect', async () => {
         console.log('User disconnected', socket.id);
+        await prisma.user.delete({
+            where: {
+                id: userDatabaseId
+            },
+        });
+        console.log('User deleted from DB')
     });
 });
 
