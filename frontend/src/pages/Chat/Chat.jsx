@@ -6,7 +6,7 @@ import User from "../../components/User/User";
 import Message from "../../components/Message/Message";
 import ScrollToBottom from 'react-scroll-to-bottom';
 
-export default function Chat ({ socket, username }) {
+export default function Chat ({ socket, username, loggedInUsers }) {
     const [currentMessage, setCurrentMessage] = useState('');
     const [messageList, setMessageList] = useState([]);
 
@@ -24,9 +24,12 @@ export default function Chat ({ socket, username }) {
     };
 
     useEffect(() => {
+        console.log('1');
         socket.on('Receive_message', (data) => {
+            console.log('2');
             setMessageList((list) => [...list, data]);
         });
+        console.log('3');
     }, [socket]);
 
     return (
@@ -63,7 +66,13 @@ export default function Chat ({ socket, username }) {
             <div className='right'>
                 <h3>Online users</h3>
                 <ul className='user-list'>
-                    <User name={username}/>
+                    {/*<User name={username}/>*/}
+                    {loggedInUsers.map((users) => {
+                        console.log(users);
+                        return (
+                            <User key={users.name} name={users.name}/>
+                        )
+                    })}
                 </ul>
             </div>
         </div>
