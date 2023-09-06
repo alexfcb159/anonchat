@@ -24,12 +24,9 @@ export default function Chat ({ socket, username, loggedInUsers }) {
     };
 
     useEffect(() => {
-        console.log('1');
         socket.on('Receive_message', (data) => {
-            console.log('2');
             setMessageList((list) => [...list, data]);
         });
-        console.log('3');
     }, [socket]);
 
     return (
@@ -66,9 +63,7 @@ export default function Chat ({ socket, username, loggedInUsers }) {
             <div className='right'>
                 <h3>Online users</h3>
                 <ul className='user-list'>
-                    {/*<User name={username}/>*/}
                     {loggedInUsers.map((users) => {
-                        console.log(users);
                         return (
                             <User key={users.name} name={users.name}/>
                         )
