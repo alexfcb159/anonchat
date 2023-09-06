@@ -1,9 +1,9 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import '../../App.css';
 import './Home.css';
 import Button from "../../components/Button/Button.jsx";
 
-export default function Home ({ socket, onUser }) {
+export default function Home ({ socket, onUser, onLoggedInUsers }) {
     const [username, setUsername] = useState('');
 
     const joinLobby = () => {
@@ -12,6 +12,12 @@ export default function Home ({ socket, onUser }) {
             socket.emit('Join_lobby', {username: username, lobby: 'Lobby'});
         }
     }
+
+    useEffect(() => {
+        socket.on('Logged_in_users', (users) => {
+            onLoggedInUsers(users);
+        });
+    }, [socket]);
 
     return (
         <div className='container'>
