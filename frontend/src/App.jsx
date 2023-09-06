@@ -9,13 +9,14 @@ const socket = io.connect('http://localhost:3000');
 
 export default function App() {
     const [username, setUsername] = useState('');
+    const [loggedInUsers, setLoggedInUsers] = useState([]);
 
     return (
         <>
             <Router>
                 <Routes>
-                    <Route path='/' element={<Home socket={socket} onUser={setUsername}/>}/>
-                    <Route path='/chat' element={<Chat socket={socket} username={username}/>}/>
+                    <Route path='/' element={<Home socket={socket} onUser={setUsername} onLoggedInUsers={setLoggedInUsers}/>}/>
+                    <Route path='/chat' element={<Chat socket={socket} username={username} loggedInUsers={loggedInUsers}/>}/>
                 </Routes>
             </Router>
         </>

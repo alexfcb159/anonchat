@@ -19,6 +19,12 @@ io.on('connection', (socket) => {
     console.log(`User connected: ${socket.id}`);
     let userDatabaseId;
 
+    const emitLoggedInUsers = async () => {
+        const users = await prisma.user.findMany();
+        console.log('All DB users: ', users);
+        io.to('Lobby').emit('Logged_in_users', users);
+    };
+
     socket.on('Join_lobby', async (data) => {
         socket.join(data.lobby);
 
@@ -29,9 +35,10 @@ io.on('connection', (socket) => {
             },
         });
 
+        await emitLoggedInUsers();
         userDatabaseId = user.id;
 
-        console.log(user);
+        console.log('Connected DB user: ', user);
         console.log(`User with ID: ${socket.id} joined room: ${data.lobby}`);
     });
 
@@ -45,12 +52,13 @@ io.on('connection', (socket) => {
     });
 
     socket.on('disconnect', async () => {
-        console.log('User disconnected', socket.id);
+        console.log('User disconnected: ', socket.id);
         await prisma.user.delete({
             where: {
                 id: userDatabaseId
             },
         });
+        await emitLoggedInUsers();
         console.log('User deleted from DB')
     });
 });
