@@ -39,16 +39,17 @@ io.on('connection', (socket) => {
         userDatabaseId = user.id;
 
         console.log('Connected DB user: ', user);
-        console.log(`User with ID: ${socket.id} joined room: ${data.lobby}`);
+        console.log(`User with ID: ${socket.id} joined ${data.lobby}`);
     });
 
     socket.on('Join_room', (data) => {
-        socket.join(data);
-        console.log(`User with ID: ${socket.id} joined room: ${data}`);
+        socket.leave('Lobby');
+        socket.join(data.room);
+        console.log(`User with ID: ${socket.id} joined room: ${data.room}`);
     });
 
     socket.on('Send_message', (data) => {
-        socket.to('Lobby').emit('Receive_message', data);
+        socket.to(data.room).emit('Receive_message', data.messageData);
     });
 
     socket.on('disconnect', async () => {

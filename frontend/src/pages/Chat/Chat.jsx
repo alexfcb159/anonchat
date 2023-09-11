@@ -9,6 +9,8 @@ import ScrollToBottom from 'react-scroll-to-bottom';
 export default function Chat ({ socket, username, loggedInUsers }) {
     const [currentMessage, setCurrentMessage] = useState('');
     const [messageList, setMessageList] = useState([]);
+    const [currentRoom, setCurrentRoom] = useState('Lobby');
+    const [previousRoom, setPreviousRoom] = useState('Lobby');
 
     const sendMessage = async () => {
         if (currentMessage !== '') {
@@ -17,11 +19,19 @@ export default function Chat ({ socket, username, loggedInUsers }) {
                 message: currentMessage,
                 time: new Date(Date.now()).getHours() + ':' + new Date(Date.now()).getMinutes()
             }
-            await socket.emit('Send_message', messageData);
+            await socket.emit('Send_message', {messageData: messageData, room: room});
             setMessageList((list) => [...list, messageData]);
             setCurrentMessage('');
         }
     };
+
+    const joinRoom = async () => {
+        console.log(currentRoom);
+        if (currentRoom !== '') {
+            await socket.emit('Join_room', {room: currentRoom});
+            setPreviousRoom(currentRoom);
+        }
+    }
 
     useEffect(() => {
         socket.on('Receive_message', (data) => {
@@ -32,7 +42,13 @@ export default function Chat ({ socket, username, loggedInUsers }) {
     return (
         <div className='container'>
             <div className='left'>
-                <Button path='/' text='Create new room'/>
+                <input
+                    type='text'
+                    className='input-small'
+                    placeholder='Enter room id'
+                    onChange={(event) => setCurrentRoom(event.target.value)}
+                />
+                <Button text='Create new room' clickHandler={joinRoom} />
                 <Button path='/' text='Find new room'/>
                 <Button path='/' text='Exit Room'/>
                 <Button path='/' text='Save nickname'/>
@@ -55,7 +71,13 @@ export default function Chat ({ socket, username, loggedInUsers }) {
                     </ScrollToBottom>
                 </div>
                 <form className='input-area'>
-                    <input type='text' className='input' placeholder='Enter your message' value={currentMessage} onChange={(event) => setCurrentMessage(event.target.value)} />
+                    <input
+                        type='text'
+                        className='input'
+                        placeholder='Enter your message'
+                        value={currentMessage}
+                        onChange={(event) => setCurrentMessage(event.target.value)}
+                    />
                     <Button text='Send message' clickHandler={sendMessage} />
                 </form>
             </div>

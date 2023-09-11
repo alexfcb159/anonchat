@@ -61,9 +61,17 @@
     flex: 0 1 60%;
 }
 
+.input-small {
+    width: 100px;
+    align-self: center;
+    padding: 5px 15px;
+    border: 1px solid gray;
+    border-radius: 5px;
+    flex: 0 1 60%;
+}
+
 .input-area Button {
     font-size: 1.5rem;
-
 }
 
 .right {

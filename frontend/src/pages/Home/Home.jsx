@@ -23,7 +23,13 @@ export default function Home ({ socket, onUser, onLoggedInUsers }) {
         <div className='container'>
             <form className='form'>
                 <label htmlFor='nickname' className='label'>Your nickname:</label>
-                <input type='text' id='nickname' className='input' placeholder='Enter your nickname' onChange={(event) => setUsername(event.target.value)}/>
+                <input
+                    type='text'
+                    id='nickname'
+                    className='input'
+                    placeholder='Enter your nickname'
+                    onChange={(event) => setUsername(event.target.value)}
+                />
                 <Button
                     path='/chat'
                     text='Enter lobby'
